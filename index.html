@@ -8,6 +8,50 @@ body {
     overflow: hidden;
 }
 
+/* ---- Password Screen ---- */
+#passwordScreen {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #111;
+    color: white;
+    flex-direction: column;
+}
+
+#passwordScreen input {
+    padding: 10px;
+    font-size: 18px;
+    border-radius: 5px;
+    border: none;
+    margin-top: 10px;
+}
+
+#passwordScreen button {
+    padding: 10px 20px;
+    font-size: 18px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Shake animation */
+@keyframes shake {
+    0% { transform: translateX(0); }
+    20% { transform: translateX(-10px); }
+    40% { transform: translateX(10px); }
+    60% { transform: translateX(-10px); }
+    80% { transform: translateX(10px); }
+    100% { transform: translateX(0); }
+}
+
+.shake {
+    animation: shake 0.5s;
+}
+
+/* ---- Navigation ---- */
 nav {
     background: #222;
     padding: 10px;
@@ -29,6 +73,7 @@ nav button:hover {
     background: #666;
 }
 
+/* ---- Screens ---- */
 .screen {
     width: 100vw;
     height: calc(100vh - 60px);
@@ -42,66 +87,66 @@ h1 {
 }
 
 /* ---- Screen Styles ---- */
-
-/* 1 — Big centered text */
-#s1 h1 {
-    font-size: 60px;
-}
-
-/* 2 — Rainbow gradient */
-#s2 {
-    background: linear-gradient(45deg, red, orange, yellow, green, blue, purple);
-}
-#s2 h1 {
-    color: white;
-    font-size: 55px;
-}
-
-/* 3 — Flashing text */
-#s3 h1 {
-    font-size: 60px;
-    animation: flash 1s infinite;
-}
-@keyframes flash {
-    0% { opacity: 1; }
-    50% { opacity: 0; }
-    100% { opacity: 1; }
-}
-
-/* 4 — Bouncing text */
-#s4 {
-    position: relative;
-}
-#s4 h1 {
-    position: absolute;
-    animation: bounce 4s infinite alternate ease-in-out;
-    font-size: 50px;
-}
-@keyframes bounce {
-    0% { left: 0; top: 0; }
-    100% { left: 60%; top: 60%; }
-}
-
-/* 5 — Neon glow text */
-#s5 {
-    background: #000;
-}
-#s5 h1 {
-    color: #0ff;
-    font-size: 60px;
-    text-shadow: 0 0 10px #0ff, 0 0 20px #0ff, 0 0 40px #0ff;
-}
+#s1 h1 { font-size: 60px; }
+#s2 { background: linear-gradient(45deg, red, orange, yellow, green, blue, purple); }
+#s2 h1 { color: white; font-size: 55px; }
+#s3 h1 { font-size: 60px; animation: flash 1s infinite; }
+@keyframes flash { 0% { opacity: 1; } 50% { opacity: 0; } 100% { opacity: 1; } }
+#s4 { position: relative; }
+#s4 h1 { position: absolute; animation: bounce 4s infinite alternate ease-in-out; font-size: 50px; }
+@keyframes bounce { 0% { left: 0; top: 0; } 100% { left: 60%; top: 60%; } }
+#s5 { background: #000; }
+#s5 h1 { color: #0ff; font-size: 60px; text-shadow: 0 0 10px #0ff, 0 0 20px #0ff, 0 0 40px #0ff; }
 </style>
 
 <script>
+const PASSWORD = "love"; // <-- set your password here
+
+function checkPassword() {
+    const inputField = document.getElementById("passwordInput");
+    const input = inputField.value;
+    const passwordScreen = document.getElementById("passwordScreen");
+
+    if(input === PASSWORD) {
+        passwordScreen.style.display = "none";
+        document.getElementById("mainContent").style.display = "block";
+        showScreen(1);
+    } else {
+        passwordScreen.classList.add("shake");
+        setTimeout(() => passwordScreen.classList.remove("shake"), 500);
+        inputField.value = "";
+        inputField.focus();
+    }
+}
+
 function showScreen(n) {
     document.querySelectorAll('.screen').forEach(div => div.style.display = 'none');
     document.getElementById('s' + n).style.display = 'flex';
 }
+
+// Add Enter key listener
+document.addEventListener("DOMContentLoaded", () => {
+    const inputField = document.getElementById("passwordInput");
+    inputField.addEventListener("keydown", (e) => {
+        if(e.key === "Enter") {
+            checkPassword();
+        }
+    });
+});
 </script>
 </head>
 
-<body onload="showScreen(1)">
+<body>
+
+<!-- Password Screen -->
+<div id="passwordScreen">
+    <h1>Enter Password</h1>
+    <input type="password" id="passwordInput" placeholder="Password">
+    <button onclick="checkPassword()">Enter</button>
+</div>
+
+<!-- Main Content (hidden until password is correct) -->
+<div id="mainContent" style="display:none;">
 
 <nav>
     <button onclick="showScreen(1)">1</button>
@@ -129,6 +174,8 @@ function showScreen(n) {
 
 <div id="s5" class="screen">
     <h1>VIHHAN I. LIKES ARIA M.</h1>
+</div>
+
 </div>
 
 </body>
